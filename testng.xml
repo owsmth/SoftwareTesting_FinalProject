@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+
+<!--
+    LinkedIn Test Automation Suite
+
+    This suite includes 8 comprehensive test classes covering:
+    1. Login Functionality (End-to-End Testing)
+    2. Homepage Navigation (System Testing, Integration Testing)
+    3. Search Functionality (Functional Testing, Integration Testing)
+    4. Registration/Signup (End-to-End Testing, Acceptance Testing)
+    5. Profile Pages (Integration Testing, System Testing)
+    6. Jobs Page (Functional Testing, Integration Testing)
+    7. Responsive Design (UI Testing, Regression Testing)
+    8. Accessibility (Accessibility Testing, Compliance Testing)
+
+    Each test class contains at least 5 well-defined test methods (most have 8-10)
+    Total: 70+ individual test cases
+-->
+
+<suite name="LinkedIn Comprehensive Test Suite" verbose="1" parallel="false">
+
+    <!-- Suite-level parameters -->
+    <parameter name="browser" value="chrome"/>
+    <parameter name="baseUrl" value="https://www.linkedin.com"/>
+
+    <!--
+        Test execution can be configured as:
+        - Sequential (parallel="false") - Recommended for stability
+        - Parallel by classes (parallel="classes") - Faster execution
+        - Parallel by methods (parallel="methods") - Maximum speed, may cause issues
+    -->
+
+    <!-- ========================================
+         TEST GROUP 1: AUTHENTICATION & REGISTRATION
+         ======================================== -->
+    <test name="Authentication and Registration Tests" preserve-order="true">
+        <classes>
+            <!-- Login functionality tests -->
+            <class name="com.linkedin.tests.LoginTest">
+                <methods>
+                    <include name="testHomepageLoads"/>
+                    <include name="testLoginFormElementsVisible"/>
+                    <include name="testEmptyCredentialsValidation"/>
+                    <include name="testInvalidEmailFormat"/>
+                    <include name="testInvalidCredentialsError"/>
+                    <include name="testForgotPasswordLink"/>
+                    <include name="testJoinNowLink"/>
+                    <include name="testEmailFieldInput"/>
+                </methods>
+            </class>
+
+            <!-- Registration/Signup tests -->
+            <class name="com.linkedin.tests.RegistrationTest">
+                <methods>
+                    <include name="testNavigateToRegistration"/>
+                    <include name="testRegistrationFormFields"/>
+                    <include name="testEmailValidation"/>
+                    <include name="testPasswordField"/>
+                    <include name="testNameFields"/>
+                    <include name="testSubmitButtonPresent"/>
+                    <include name="testTermsAndConditions"/>
+                    <include name="testEmptyFieldValidation"/>
+                    <include name="testSocialSignupOptions"/>
+                    <include name="testSignInLinkFromSignup"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+
+    <!-- ========================================
+         TEST GROUP 2: NAVIGATION & SEARCH
+         ======================================== -->
+    <test name="Navigation and Search Tests" preserve-order="true">
+        <classes>
+            <!-- Homepage navigation tests -->
+            <class name="com.linkedin.tests.HomepageNavigationTest">
+                <methods>
+                    <include name="testMainNavigationPresent"/>
+                    <include name="testSignInLinkClickable"/>
+                    <include name="testJoinNowLinkPresent"/>
+                    <include name="testFooterPresent"/>
+                    <include name="testLanguageOptionsPresent"/>
+                    <include name="testPageScrolling"/>
+                    <include name="testMetaDescriptionPresent"/>
+                    <include name="testHeadingStructure"/>
+                    <include name="testPageLoadPerformance"/>
+                    <include name="testCriticalResourcesLoaded"/>
+                </methods>
+            </class>
+
+            <!-- Search functionality tests -->
+            <class name="com.linkedin.tests.SearchFunctionalityTest">
+                <methods>
+                    <include name="testSearchFieldPresent"/>
+                    <include name="testSearchFieldAcceptsInput"/>
+                    <include name="testSearchSuggestions"/>
+                    <include name="testSearchWithEnterKey"/>
+                    <include name="testSearchButtonClickable"/>
+                    <include name="testClearSearchInput"/>
+                    <include name="testSearchPlaceholder"/>
+                    <include name="testSearchSpecialCharacters"/>
+                    <include name="testSearchAccessibility"/>
+                    <include name="testSearchLongQuery"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+
+    <!-- ========================================
+         TEST GROUP 3: CONTENT PAGES
+         ======================================== -->
+    <test name="Content Pages Tests" preserve-order="true">
+        <classes>
+            <!-- Profile page tests -->
+            <class name="com.linkedin.tests.ProfilePageTest">
+                <methods>
+                    <include name="testPublicProfileAccessible"/>
+                    <include name="testProfileHeaderPresent"/>
+                    <include name="testProfileSectionsVisible"/>
+                    <include name="testProfileUrlFormat"/>
+                    <include name="testProfileMetaTags"/>
+                    <include name="testCanonicalUrl"/>
+                    <include name="testProfileScrolling"/>
+                    <include name="testStructuredData"/>
+                    <include name="testProfileLinks"/>
+                    <include name="testResponsiveDesign"/>
+                </methods>
+            </class>
+
+            <!-- Jobs page tests -->
+            <class name="com.linkedin.tests.JobsPageTest">
+                <methods>
+                    <include name="testJobsPageAccessible"/>
+                    <include name="testJobSearchBoxPresent"/>
+                    <include name="testLocationSearchField"/>
+                    <include name="testJobListingsDisplay"/>
+                    <include name="testJobFilters"/>
+                    <include name="testJobSearchExecution"/>
+                    <include name="testJobRelatedContent"/>
+                    <include name="testJobActionButtons"/>
+                    <include name="testJobRecommendations"/>
+                    <include name="testJobsPageFooter"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+
+    <!-- ========================================
+         TEST GROUP 4: UI/UX & ACCESSIBILITY
+         ======================================== -->
+    <test name="UI/UX and Accessibility Tests" preserve-order="true">
+        <classes>
+            <!-- Responsive design tests -->
+            <class name="com.linkedin.tests.ResponsiveDesignTest">
+                <methods>
+                    <include name="testMobileViewport"/>
+                    <include name="testTabletViewport"/>
+                    <include name="testDesktopViewport"/>
+                    <include name="testResponsiveNavigation"/>
+                    <include name="testResponsiveImages"/>
+                    <include name="testTextReadability"/>
+                    <include name="testNoHorizontalScroll"/>
+                    <include name="testTouchFriendlyElements"/>
+                    <include name="testOrientationChange"/>
+                    <include name="testBreakpointTransitions"/>
+                </methods>
+            </class>
+
+            <!-- Accessibility tests -->
+            <class name="com.linkedin.tests.AccessibilityTest">
+                <methods>
+                    <include name="testLangAttribute"/>
+                    <include name="testImageAltText"/>
+                    <include name="testFormLabels"/>
+                    <include name="testButtonAccessibleNames"/>
+                    <include name="testHeadingHierarchy"/>
+                    <include name="testSkipNavigationLink"/>
+                    <include name="testAriaLandmarks"/>
+                    <include name="testColorContrast"/>
+                    <include name="testKeyboardNavigation"/>
+                    <include name="testFocusIndicators"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+
+    <!-- ========================================
+         LISTENERS (for reporting and logging)
+         ======================================== -->
+    <listeners>
+        <!-- Add custom listeners here if needed -->
+        <!-- Example: <listener class-name="com.linkedin.listeners.TestListener"/> -->
+    </listeners>
+
+</suite>
