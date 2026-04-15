@@ -23,7 +23,7 @@ import java.util.List;
 
 public class ProfilePageTest extends BaseTest {
 
-    private static final String SAMPLE_PROFILE_URL = baseUrl + "/in/williamhgates";
+    private static final String SAMPLE_PROFILE_URL = baseUrl + "/in/ryanroslansky";
 
     // Test 1: Verify public profile page is accessible
 
@@ -33,6 +33,8 @@ public class ProfilePageTest extends BaseTest {
 
         driver.get(SAMPLE_PROFILE_URL);
         pause(2000);
+
+        handleSignInPopup();
 
         String currentUrl = driver.getCurrentUrl();
         System.out.println("Current URL: " + currentUrl);
@@ -57,6 +59,8 @@ public class ProfilePageTest extends BaseTest {
 
         driver.get(SAMPLE_PROFILE_URL);
         pause(2000);
+
+        handleSignInPopup();
 
         // Look for profile header elements
         List<WebElement> headings = driver.findElements(By.tagName("h1"));
@@ -87,6 +91,8 @@ public class ProfilePageTest extends BaseTest {
         driver.get(SAMPLE_PROFILE_URL);
         pause(3000);
 
+        handleSignInPopup();
+
         // Look for section headings
         List<WebElement> h2Headings = driver.findElements(By.tagName("h2"));
         System.out.println("Found " + h2Headings.size() + " section headings");
@@ -112,6 +118,8 @@ public class ProfilePageTest extends BaseTest {
 
         driver.get(SAMPLE_PROFILE_URL);
         pause(2000);
+
+        handleSignInPopup();
 
         String currentUrl = driver.getCurrentUrl();
         System.out.println("Profile URL: " + currentUrl);
@@ -140,6 +148,8 @@ public class ProfilePageTest extends BaseTest {
 
         driver.get(SAMPLE_PROFILE_URL);
         pause(2000);
+
+        handleSignInPopup();
 
         // Check for Open Graph tags
         List<WebElement> ogTags = driver.findElements(

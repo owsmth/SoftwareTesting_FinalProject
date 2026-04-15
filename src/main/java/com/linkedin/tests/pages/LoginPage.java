@@ -155,7 +155,7 @@ public class LoginPage {
     }
 
     // Get page title
-    
+
     public String getPageTitle() {
         return driver.getTitle();
     }

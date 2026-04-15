@@ -6,6 +6,11 @@ import org.openqa.selenium.WebElement;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import java.util.List;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import java.time.Duration;
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.TimeoutException;
 
 /**
  * JobsPageTest - Test Suite for LinkedIn Jobs Functionality
@@ -21,7 +26,7 @@ import java.util.List;
  */
 public class JobsPageTest extends BaseTest {
 
-    private static final String JOBS_URL = baseUrl + "/jobs";
+    private static final String JOBS_URL = baseUrl + "/jobs/search";
 
     // Test 1: Verify jobs page is accessible
 
@@ -31,6 +36,8 @@ public class JobsPageTest extends BaseTest {
 
         driver.get(JOBS_URL);
         pause(3000);
+
+        handleSignInPopup();
 
         String currentUrl = driver.getCurrentUrl();
         System.out.println("Current URL: " + currentUrl);
@@ -52,24 +59,23 @@ public class JobsPageTest extends BaseTest {
     @Test(priority = 2, description = "Verify job search box presence")
     public void testJobSearchBoxPresent() {
         System.out.println("\n=== Test 2: Job Search Box ===");
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 
         driver.get(JOBS_URL);
-        pause(3000);
 
-        // Look for job search input fields
-        List<WebElement> searchInputs = driver.findElements(
-                By.xpath("//input[@placeholder or @type='search' or contains(@aria-label, 'Search')]")
-        );
+        handleSignInPopup();
 
-        System.out.println("Found " + searchInputs.size() + " search input field(s)");
+        // Target the specific job search input by name or unique placeholder
+        // Using 'name' is much more stable than generic placeholders
+        WebElement searchBox = wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//input[@name='keywords' or @placeholder='Search job titles or companies']")
+        ));
 
-        if (searchInputs.size() > 0) {
-            WebElement searchBox = searchInputs.get(0);
-            String placeholder = searchBox.getAttribute("placeholder");
-            System.out.println("Search placeholder: " + placeholder);
-            Assert.assertTrue(searchBox.isDisplayed(),
-                    "Search box should be visible");
-        }
+        String placeholder = searchBox.getAttribute("placeholder");
+        System.out.println("Detected Search Box with placeholder: " + placeholder);
+
+        // Verify it is actually on the screen
+        Assert.assertTrue(searchBox.isDisplayed(), "Job title search box should be visible");
 
         System.out.println("✓ Job search functionality detected");
     }
@@ -82,6 +88,8 @@ public class JobsPageTest extends BaseTest {
 
         driver.get(JOBS_URL);
         pause(3000);
+
+        handleSignInPopup();
 
         // Look for location input
         List<WebElement> locationInputs = driver.findElements(
@@ -107,6 +115,8 @@ public class JobsPageTest extends BaseTest {
 
         driver.get(JOBS_URL);
         pause(3000);
+
+        handleSignInPopup();
 
         // Scroll to ensure content loads
         ((org.openqa.selenium.JavascriptExecutor) driver)
@@ -139,6 +149,8 @@ public class JobsPageTest extends BaseTest {
         driver.get(JOBS_URL);
         pause(3000);
 
+        handleSignInPopup();
+
         // Look for filter elements
         List<WebElement> filterElements = driver.findElements(
                 By.xpath("//*[contains(text(), 'Filter') or contains(@class, 'filter') or contains(text(), 'Sort')]")
@@ -165,40 +177,39 @@ public class JobsPageTest extends BaseTest {
     @Test(priority = 6, description = "Verify job search execution")
     public void testJobSearchExecution() {
         System.out.println("\n=== Test 6: Job Search Execution ===");
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 
         driver.get(JOBS_URL);
-        pause(3000);
 
+        handleSignInPopup();
+
+        // 1. Locate the keyword input field
+        // Based on the screenshot, the 'name' or 'placeholder' is the best bet
+        WebElement searchInput = wait.until(ExpectedConditions.elementToBeClickable(
+                By.xpath("//input[@name='keywords' or @placeholder='Search job titles or companies']")
+        ));
+
+        // 2. Type and press ENTER
+        String searchQuery = "Software Engineer";
+        searchInput.clear();
+        searchInput.sendKeys(searchQuery + Keys.ENTER);
+        System.out.println("Typed search query and pressed Enter key.");
+
+        // 3. Wait for the results to refresh
+        // We look for the list of job cards (the <li> or <ul> on the left)
         try {
-            // Find search input
-            WebElement searchInput = driver.findElement(
-                    By.xpath("//input[@placeholder or @type='search']")
-            );
-
-            String searchQuery = "Software Engineer";
-            searchInput.sendKeys(searchQuery);
-            System.out.println("Entered search query: " + searchQuery);
-
-            // Look for search button
-            List<WebElement> searchButtons = driver.findElements(
-                    By.xpath("//button[contains(., 'Search') or @type='submit']")
-            );
-
-            if (searchButtons.size() > 0) {
-                searchButtons.get(0).click();
-                pause(3000);
-                System.out.println("Clicked search button");
-            } else {
-                searchInput.submit();
-                pause(3000);
-                System.out.println("Submitted search form");
-            }
+            wait.until(ExpectedConditions.presenceOfElementLocated(
+                    By.cssSelector(".jobs-search__results-list, .jobs-search-results-list")
+            ));
 
             String currentUrl = driver.getCurrentUrl();
-            System.out.println("URL after search: " + currentUrl);
+            System.out.println("Search successful! URL is now: " + currentUrl);
 
-        } catch (Exception e) {
-            System.out.println("Job search execution: " + e.getMessage());
+            // Assert that the URL contains our search term (replaces the try-catch print)
+            Assert.assertTrue(currentUrl.contains("Software"), "Search did not redirect correctly!");
+
+        } catch (TimeoutException e) {
+            Assert.fail("Search results did not load after pressing Enter.");
         }
 
         System.out.println("✓ Job search execution test completed");
